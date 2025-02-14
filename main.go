@@ -3,31 +3,40 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
-
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
-type requestBody struct {
-	Message string `json:"message"`
-}
+//type requestBody struct {
+//	Message string `json:"message"`
+//}
 
-var task string
+var task Task
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
-	var reqBody requestBody
-	json.NewDecoder(r.Body).Decode(&reqBody)
-	task = reqBody.Message
-	fmt.Fprintf(w, "Есть сообщение : %s", task)
+	json.NewDecoder(r.Body).Decode(&task)
+	DB.Create(&task)
+	fmt.Fprintf(w, "Message is ,%s!", task.Task)
 }
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "hello %s", task)
+	var tasks []Task
+	DB.Find(&tasks)
+	for _, task := range tasks {
+		fmt.Fprintf(w, "Сообщения из БД %s!\n", task.Task)
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func main() {
+	// Вызываем метод InitDB() из файла db.go
+	InitDB()
+
+	// Автоматическая миграция модели Message
+	DB.AutoMigrate(&Task{})
+
 	router := mux.NewRouter()
-	router.HandleFunc("/api/hello", HelloHandler).Methods("GET")
-	router.HandleFunc("/api/task", PostHandler).Methods("POST")
-	http.ListenAndServe(":8082", router)
+	router.HandleFunc("/api/messages", PostHandler).Methods("POST")
+	router.HandleFunc("/api/messages", HelloHandler).Methods("GET")
+	http.ListenAndServe(":8084", router)
 }
