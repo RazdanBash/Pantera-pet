@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -13,18 +12,27 @@ import (
 
 var task Task
 
+type JsonStruct struct {
+}
+
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&task)
 	DB.Create(&task)
-	fmt.Fprintf(w, "Message is ,%s!", task.Task)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	//fmt.Fprintf(w, "Message is ,%s!", task.Task)
+	response := map[string]string{"Задча создана": task.Task}
+	json.NewEncoder(w).Encode(response)
 }
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
 	var tasks []Task
 	DB.Find(&tasks)
-	for _, task := range tasks {
-		fmt.Fprintf(w, "Сообщения из БД %s!\n", task.Task)
-	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(tasks)
+	//for _, task := range tasks {
+	//	fmt.Fprintf(w, "Сообщения из БД %s!\n", task.Task)
+	//}
 	w.WriteHeader(http.StatusOK)
 }
 
