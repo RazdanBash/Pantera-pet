@@ -16,13 +16,12 @@ type JsonStruct struct {
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
+	//var tasks []Task
 	json.NewDecoder(r.Body).Decode(&task)
 	DB.Create(&task)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	//fmt.Fprintf(w, "Message is ,%s!", task.Task)
-	response := map[string]string{"Задча создана": task.Task}
-	json.NewEncoder(w).Encode(response)
+	json.NewEncoder(w).Encode(task)
 }
 
 func HelloHandler(w http.ResponseWriter, r *http.Request) {
