@@ -1,10 +1,10 @@
 package taskService
 
 type TaskService struct {
-	repo MessageRepository
+	repo TaskRepository
 }
 
-func NewService(repo MessageRepository) *TaskService {
+func NewService(repo *taskRepository) *TaskService {
 	return &TaskService{repo: repo}
 }
 
@@ -16,9 +16,11 @@ func (s *TaskService) GetAllTasks() ([]Task, error) {
 	return s.repo.GetAllTasks()
 }
 
-func (s *TaskService) DeleteTask(task Task) error {
-	return s.repo.DeleteTaskByID(task.ID)
+func (s *TaskService) UpdateTaskByID(id uint, task Task) (Task, error) {
+	return s.repo.UpdateTaskByID(id, task)
 }
 
-//func (s *taskService) UpdateTask(id uint) (Task, error) {
-//	return s.repo.UpdateTaskByID()
+func (s *TaskService) DeleteTask(id uint) error {
+
+	return s.repo.DeleteTaskByID(id)
+}

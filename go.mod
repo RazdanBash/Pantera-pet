@@ -1,4 +1,4 @@
-module github.com/RazdanBash/Pantera-pet
+module myProject
 
 go 1.23.5
 
