@@ -1,5 +1,13 @@
 package taskService
 
+import (
+	"errors"
+)
+
+var (
+	ErrTaskNotFound = errors.New("Task not found")
+)
+
 type TaskService struct {
 	repo TaskRepository
 }
