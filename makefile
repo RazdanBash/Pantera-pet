@@ -31,3 +31,6 @@ run:
 	@echo "Starting the application..."
 	go run cmd/app/main.go
 
+lint:
+	golangci-lint run --out-format=colored-line-number
+

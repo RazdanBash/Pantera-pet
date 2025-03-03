@@ -12,12 +12,15 @@ import (
 
 func main() {
 	database.InitDB()
-	database.DB.AutoMigrate(&taskService.Task{})
+	err := database.DB.AutoMigrate(&taskService.Task{})
+	if err != nil {
+		log.Fatalf("Error migrating tasks table: %v", err)
+	}
 
 	repo := taskService.NewTaskRepository(database.DB)
 	service := taskService.NewService(repo)
 
-	handler := handlers.Handler{service}
+	handler := handlers.Handler{Service: service}
 
 	// Инициализируем echo
 	e := echo.New()

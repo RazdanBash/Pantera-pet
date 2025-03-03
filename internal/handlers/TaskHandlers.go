@@ -12,12 +12,12 @@ type Handler struct {
 	Service *taskService.TaskService
 }
 
-func (h *Handler) DeleteTasksId(ctx context.Context, request tasks.DeleteTasksIdRequestObject) (tasks.DeleteTasksIdResponseObject, error) {
+func (h *Handler) DeleteTasksId(_ context.Context, request tasks.DeleteTasksIdRequestObject) (tasks.DeleteTasksIdResponseObject, error) {
 	taskID := request.Id
 
 	err := h.Service.DeleteTask(taskID)
 	if err != nil {
-		if err == taskService.ErrTaskNotFound {
+		if errors.Is(err, taskService.ErrTaskNotFound) {
 			return tasks.DeleteTasksId404JSONResponse{}, nil
 		}
 		return tasks.DeleteTasksId500JSONResponse{}, nil
@@ -26,7 +26,7 @@ func (h *Handler) DeleteTasksId(ctx context.Context, request tasks.DeleteTasksId
 	return tasks.DeleteTasksId204Response{}, nil
 }
 
-func (h *Handler) PatchTasksId(ctx context.Context, request tasks.PatchTasksIdRequestObject) (tasks.PatchTasksIdResponseObject, error) {
+func (h *Handler) PatchTasksId(_ context.Context, request tasks.PatchTasksIdRequestObject) (tasks.PatchTasksIdResponseObject, error) {
 	taskID := request.Id
 	taskUpdate := request.Body
 
@@ -53,7 +53,7 @@ func (h *Handler) PatchTasksId(ctx context.Context, request tasks.PatchTasksIdRe
 	return response, nil
 }
 
-func (h *Handler) GetTasks(ctx context.Context, _ tasks.GetTasksRequestObject) (tasks.GetTasksResponseObject, error) {
+func (h *Handler) GetTasks(_ context.Context, _ tasks.GetTasksRequestObject) (tasks.GetTasksResponseObject, error) {
 	// Получение всех задач из сервиса
 	allTasks, err := h.Service.GetAllTasks()
 	if err != nil {
@@ -78,7 +78,7 @@ func (h *Handler) GetTasks(ctx context.Context, _ tasks.GetTasksRequestObject) (
 	return response, nil
 }
 
-func (h *Handler) PostTasks(ctx context.Context, request tasks.PostTasksRequestObject) (tasks.PostTasksResponseObject, error) {
+func (h *Handler) PostTasks(_ context.Context, request tasks.PostTasksRequestObject) (tasks.PostTasksResponseObject, error) {
 	// Распаковываем тело запроса напрямую, без декодера!
 	taskRequest := request.Body
 	// Обращаемся к сервису и создаем задачу

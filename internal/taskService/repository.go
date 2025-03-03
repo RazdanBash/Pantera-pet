@@ -58,6 +58,7 @@ func (r *taskRepository) DeleteTaskByID(id uint) error {
 	var task Task
 	result := r.db.Where("id = ?", id).Delete(&task)
 	if result.Error != nil {
+		return result.Error
 	}
 	return nil
 
