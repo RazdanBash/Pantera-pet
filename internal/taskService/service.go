@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	ErrTaskNotFound = errors.New("Task not found")
+	ErrTaskNotFound = errors.New("task not found")
 )
 
 type TaskService struct {
