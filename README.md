@@ -1,11 +1,7 @@
 # Pantera-pet
 
 
-## Домашнее задание №1
-![ДЗ - 1](assets/Screenshot_1.png)
-![ДЗ - 1](assets/Screenshot_2.png)
+## I want to believe
+![Ценности проекта](assets/8ab94ad8da2e911d9556c5582aa7b8ce.jpg)
 
-## Домашнее задание №2
-![ДЗ - 2](assets/hw2.png)
-![ДЗ - 2](assets/hw2.2.png)
 
