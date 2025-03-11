@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"context"
-	"errors"
-	"gorm.io/gorm"
-	"myProject/internal/taskService"
-	"myProject/internal/web/tasks"
+	"myProject/internal/userService"
 )
+
+type Handler struct {
+	Service *userService.UserService
+}

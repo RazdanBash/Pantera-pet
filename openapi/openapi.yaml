@@ -88,24 +88,7 @@ paths:
                 properties:
                   message:
                     type: string
-    post:
-      summary: Create a new user
-      tags:
-        - users
-      requestBody:
-        description: The user to create
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserBody'
-      responses:
-        '201':
-          description: The created task
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/users'
+
 
     delete:
       summary: Delete task
@@ -152,43 +135,60 @@ paths:
                 schema:
                   type: array
                   items:
-                    $ref: '#/components/schemas/users'
-      patch:
-        summary: Edit task
+                    $ref: '#/components/schemas/User'
+      post:
+        summary: Create a new user
         tags:
           - users
-        parameters:
-          - name: id
-            in: path
-            required: true
-            schema:
-              type: integer
-              format: uint
-
-
         requestBody:
-          description: The task data to update
+          description: The user to create
           required: true
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserBody'
         responses:
-          '200':
-            description: Task edited
+          '201':
+            description: The created task
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/users'
-          '404':
-            description: Task not found
+                  $ref: '#/components/schemas/User'
+  /users/{id}:
+      patch:
+          summary: Edit user
+          tags:
+            - users
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: uint
+          requestBody:
+            description: The userdata to update
+            required: true
             content:
               application/json:
                 schema:
-                  type: object
-                  properties:
-                    message:
-                      type: string
+                  $ref: '#/components/schemas/UserBody'
+          responses:
+            '200':
+              description: User edited
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/User'
+            '404':
+              description: User not found
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      message:
+                        type: string
       delete:
         summary: Delete user
         tags:
@@ -224,7 +224,7 @@ paths:
 
 components:
   schemas:
-    users:
+    User:
       type: object
       properties:
         id:
@@ -236,6 +236,7 @@ components:
           type: string
         password:
           type: string
+
     UserBody:
       type: object
       properties:
@@ -245,7 +246,6 @@ components:
           type: string
         email:
           type: string
-
 
     Task:
       type: object
