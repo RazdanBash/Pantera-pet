@@ -88,6 +88,24 @@ paths:
                 properties:
                   message:
                     type: string
+    post:
+      summary: Create a new user
+      tags:
+        - users
+      requestBody:
+        description: The user to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBody'
+      responses:
+        '201':
+          description: The created task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users'
 
     delete:
       summary: Delete task
@@ -135,6 +153,74 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/users'
+      patch:
+        summary: Edit task
+        tags:
+          - users
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: uint
+
+
+        requestBody:
+          description: The task data to update
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBody'
+        responses:
+          '200':
+            description: Task edited
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/users'
+          '404':
+            description: Task not found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+      delete:
+        summary: Delete user
+        tags:
+          - users
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: uint
+        responses:
+          '204':
+            description: User deleted
+          '404':
+            description: User not found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+          '500':
+            description: Internal server error
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
 
 components:
   schemas:
@@ -150,6 +236,17 @@ components:
           type: string
         password:
           type: string
+    UserBody:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+
+
     Task:
       type: object
       properties:
