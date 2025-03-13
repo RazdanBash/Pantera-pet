@@ -7,7 +7,9 @@ import (
 	"myProject/internal/database"
 	"myProject/internal/handlers"
 	"myProject/internal/taskService"
+	"myProject/internal/userService"
 	"myProject/internal/web/tasks"
+	"myProject/internal/web/users"
 )
 
 func main() {
@@ -17,10 +19,13 @@ func main() {
 		log.Fatalf("Error migrating tasks table: %v", err)
 	}
 
-	repo := taskService.NewTaskRepository(database.DB)
-	service := taskService.NewService(repo)
+	tasksRepo := taskService.NewTaskRepository(database.DB)
+	usersRepo := userService.NewUserRepository(database.DB)
+	tasksService := taskService.NewService(tasksRepo)
+	usersService := userService.NewUserService(usersRepo)
 
-	handler := handlers.Handler{Service: service}
+	tasksHandler := handlers.Handler{Service: tasksService}
+	usersHandler := handlers.UserHandler{Service: usersService}
 
 	// Инициализируем echo
 	e := echo.New()
@@ -30,8 +35,11 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Прикол для работы в echo. Передаем и регистрируем хендлер в echo
-	strictHandler := tasks.NewStrictHandler(&handler, nil) //
-	tasks.RegisterHandlers(e, strictHandler)
+	strictTasksHandler := tasks.NewStrictHandler(&tasksHandler, nil) //
+	strictUsersHandler := users.NewStrictHandler(&usersHandler, nil)
+
+	tasks.RegisterHandlers(e, strictTasksHandler)
+	users.RegisterHandlers(e, strictUsersHandler)
 
 	if err := e.Start(":8084"); err != nil {
 		log.Fatalf("failed to start with err: %v", err)
