@@ -19,6 +19,12 @@ func main() {
 		log.Fatalf("Error migrating tasks table: %v", err)
 	}
 
+	// Миграция таблицы пользователей
+	err = database.DB.AutoMigrate(&userService.User{})
+	if err != nil {
+		log.Fatalf("Error migrating users table: %v", err)
+	}
+
 	tasksRepo := taskService.NewTaskRepository(database.DB)
 	usersRepo := userService.NewUserRepository(database.DB)
 	tasksService := taskService.NewService(tasksRepo)
