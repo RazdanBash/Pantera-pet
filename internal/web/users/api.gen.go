@@ -241,7 +241,6 @@ func (response PatchUsersId404JSONResponse) VisitPatchUsersIdResponse(w http.Res
 	return json.NewEncoder(w).Encode(response)
 }
 
-type PatchUsersId500JSONResponse struct 
 type PatchUsersId500JSONResponse struct {
 	Message *string `json:"message,omitempty"`
 }
