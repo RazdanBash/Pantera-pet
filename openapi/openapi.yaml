@@ -23,6 +23,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Task'
+
     post:
       summary: Create a new task
       tags:
@@ -257,6 +258,9 @@ components:
           type: string
         is_done:
           type: boolean
+        userId:
+          type:
+            integer
     TaskBody:
       type: object
       properties:
