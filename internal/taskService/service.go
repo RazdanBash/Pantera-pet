@@ -16,12 +16,12 @@ func NewService(repo *taskRepository) *TaskService {
 	return &TaskService{repo: repo}
 }
 
-func (s *TaskService) CreateTask(task Task) (Task, error) {
-	return s.repo.CreateTask(task)
+func (s *TaskService) CreateTask(id uint, task Task) (Task, error) {
+	return s.repo.CreateTask(id, task)
 }
 
-func (s *TaskService) GetAllTasks() ([]Task, error) {
-	return s.repo.GetAllTasks()
+func (s *TaskService) GetTaskByUserId(id uint) ([]Task, error) {
+	return s.repo.GetTaskByUserId(id)
 }
 
 func (s *TaskService) UpdateTaskByID(id uint, task Task) (Task, error) {

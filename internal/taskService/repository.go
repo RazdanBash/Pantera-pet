@@ -7,9 +7,9 @@ import (
 type TaskRepository interface {
 	// CreateTask - Передаем в функцию task типа Task из orm.go
 	// возвращаем созданный Task и ошибку
-	CreateTask(task Task) (Task, error)
-	// GetAllTasks - Возвращаем массив из всех задач в БД и ошибку
-	GetAllTasks() ([]Task, error)
+	CreateTask(id uint, task Task) (Task, error)
+	// GetTaskByUserId - Возвращаем массив из всех задач в БД и ошибку
+	GetTaskByUserId(id uint) ([]Task, error)
 	// UpdateTaskByID - Передаем id и Task, возвращаем обновленный Task
 	// и ошибку
 	UpdateTaskByID(id uint, task Task) (Task, error)
@@ -25,7 +25,8 @@ func NewTaskRepository(db *gorm.DB) *taskRepository {
 	return &taskRepository{db: db}
 }
 
-func (r *taskRepository) CreateTask(task Task) (Task, error) {
+func (r *taskRepository) CreateTask(id uint, task Task) (Task, error) {
+	task.UserID = id
 	result := r.db.Create(&task)
 	if result.Error != nil {
 		return Task{}, result.Error
@@ -33,10 +34,14 @@ func (r *taskRepository) CreateTask(task Task) (Task, error) {
 	return task, nil
 }
 
-func (r *taskRepository) GetAllTasks() ([]Task, error) {
+func (r *taskRepository) GetTaskByUserId(id uint) ([]Task, error) {
 	var tasks []Task
-	err := r.db.Find(&tasks).Error
-	return tasks, err
+	err := r.db.Where("user_id = ?", id).Find(&tasks).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }
 
 func (r *taskRepository) UpdateTaskByID(id uint, task Task) (Task, error) {

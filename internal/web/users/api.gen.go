@@ -16,17 +16,17 @@ import (
 
 // User defines model for User.
 type User struct {
-	Email    *string `json:"email,omitempty"`
 	Id       *uint   `json:"id,omitempty"`
-	Password *string `json:"password,omitempty"`
 	Username *string `json:"username,omitempty"`
+	Password *string `json:"password,omitempty"`
+	Email    *string `json:"email,omitempty"`
 }
 
 // UserBody defines model for UserBody.
 type UserBody struct {
-	Email    *string `json:"email,omitempty"`
-	Password *string `json:"password,omitempty"`
 	Username *string `json:"username,omitempty"`
+	Password *string `json:"password,omitempty"`
+	Email    *string `json:"email,omitempty"`
 }
 
 // PostUsersJSONRequestBody defines body for PostUsers for application/json ContentType.
